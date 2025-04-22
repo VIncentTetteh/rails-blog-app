@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blog-config
+data:
+  DB_HOST_PROD: ep-lively-mountain-a5ufa8bc-pooler.us-east-2.aws.neon.tech #blog-postgres.default.svc.cluster.local
+  DB_NAME_PROD: blog_prod

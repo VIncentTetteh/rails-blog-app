@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-app
+  template:
+    metadata:
+      labels:
+        app: blog-app
+    spec:
+      containers:
+        - name: rails
+          image: blog-app:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          env:
+            - name: DB_HOST_PROD
+              valueFrom:
+                configMapKeyRef:
+                  name: blog-config
+                  key: DB_HOST_PROD
+
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: blog-secrets
+                  key: RAILS_MASTER_KEY
+            - name: DB_NAME_PROD
+              valueFrom:
+                configMapKeyRef:
+                  name: blog-config
+                  key: DB_NAME_PROD
+            - name: DB_USERNAME_PROD
+              valueFrom:
+                secretKeyRef:
+                  name: blog-secrets
+                  key: DB_USERNAME_PROD
+            - name: DB_PASSWORD_PROD
+              valueFrom:
+                secretKeyRef:
+                  name: blog-secrets
+                  key: DB_PASSWORD_PROD
+
